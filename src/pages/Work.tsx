@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'motion/react';
-import { X, Volume2, VolumeX, ArrowUpRight } from 'lucide-react';
+import { motion, AnimatePresence, useSpring } from 'motion/react';
+import { X, Volume2, VolumeX } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import Player from '@vimeo/player';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -15,7 +14,7 @@ interface Project {
   title: string;
   category: string;
   description: string;
-  vimeoId: string;
+  videoUrl: string;
   thumbnail: string;
   runtime: string;
   tags: string[];
@@ -28,7 +27,7 @@ const PROJECTS: Project[] = [
     title: 'The 27 Protocol',
     category: 'AI Film Trailer',
     description: 'A high-energy commercial for the modern athlete.',
-    vimeoId: '1164958969',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1164958969/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=2e9eacb8e9e1f6e12b82309906984dd98a0df089a1fb64ab6a90ef073572fcb5',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640ecdd4ec61394f33311a88_1_Crisp TVC on Vimeo-poster-00001.jpg',
     runtime: ':30',
     tags: ['Direction', 'Edit', 'Color'],
@@ -38,7 +37,7 @@ const PROJECTS: Project[] = [
     title: 'The Thorne Recordings',
     category: 'AI Film Trailer',
     description: 'Capturing the rhythm and soul of the dance floor.',
-    vimeoId: '1163094870',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1163094870/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=3299521bc24ad7f4a3efe5dc160d6f7afc443be64f4bf188ae4c71ed2a0099a2',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640eca40be4a447bbd64798c_2_Offline by Aerie TV ad for Dancing With Stars-poster-00001.jpg',
     runtime: ':60',
     tags: ['VFX', 'Sound Design'],
@@ -48,7 +47,7 @@ const PROJECTS: Project[] = [
     title: 'El Patron',
     category: 'AI Film Trailer',
     description: 'The art of mixology captured in cinematic detail.',
-    vimeoId: '1154404778',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1154404778/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=d29d7127321c856c107613da77cebf0579f9f9c033120f26d5519a335704eed7',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640ecd96d1a77e000b9bbbae_3_BOLS cocktails-poster-00001.jpg',
     runtime: ':15',
     tags: ['Macro', 'AI Production'],
@@ -58,7 +57,7 @@ const PROJECTS: Project[] = [
     title: 'America F*ck Yeah!',
     category: 'Tesla Commercial',
     description: 'A dreamlike journey across the coastal dunes.',
-    vimeoId: '1152657713',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1152657713/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=88f6fba20e22df9842a4241562aeace2486bca8c5ab191c7805a34b86f80e5f3',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640ece24a521a5fcb86da1c7_6_TRACA \'People On The Sand\' Music video-poster-00001.jpg',
     runtime: '3:45',
     tags: ['Music Video', 'Direction'],
@@ -68,7 +67,7 @@ const PROJECTS: Project[] = [
     title: 'Manifest Nueve',
     category: 'Fragrance Commercial',
     description: 'The essence of luxury in every frame.',
-    vimeoId: '1127254270',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1127254270/rendition/720p/file.mp4%20%28720p%29.mp4?loc=external&signature=661e477ace69b38971dac27971f9e364c65c3bc6c5b13de2d4ad7aef977a8070',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640ea8b4062316b67616f46e_5_Swiss Arabian Campaign film-poster-00001.jpg',
     runtime: ':45',
     tags: ['Fashion', 'Cinematography'],
@@ -78,7 +77,7 @@ const PROJECTS: Project[] = [
     title: '1810 History Rewritten',
     category: 'Hollywood Studio Series Trailer',
     description: 'Behind the lens of the world\'s most iconic camera.',
-    vimeoId: '1126892819',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1126892819/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=1e7991bd2f53a519e962403f7711d6ab2c86801ad37abb3ded9765daace03bfa',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640ecd5653155c1838650b64_4_Leica M11 x BTS on Vimeo-poster-00001.jpg',
     runtime: '5:20',
     tags: ['Documentary', 'Edit'],
@@ -88,7 +87,7 @@ const PROJECTS: Project[] = [
     title: 'America 250',
     category: 'National Interactive Experience',
     description: 'High fashion meets cinematic storytelling.',
-    vimeoId: '1157653008',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1157653008/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=de3f5a203e29775fbcf683e3050ebf2a17916e354fbcbaba5164cf327ca0b66f',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640ecb56637b80fa605d299a_7_SALONI - F-W19-poster-00001.jpg',
     runtime: ':30',
     tags: ['Fashion', 'Color'],
@@ -98,7 +97,7 @@ const PROJECTS: Project[] = [
     title: 'Belmont',
     category: 'AI Horror Short Film',
     description: 'A gritty, urban exploration of street culture.',
-    vimeoId: '1134025084',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1134025084/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=7b6d9cf400d655a37b8c209332f32095ced07686cb959a1f99597b5d0b4966fe',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640ecaa9db18eb578a523d44_8_IRIEDAILY - Beware of the Monkey on Vimeo-poster-00001.jpg',
     runtime: '1:45',
     tags: ['Street', 'Action'],
@@ -108,7 +107,7 @@ const PROJECTS: Project[] = [
     title: 'Mojave Signal',
     category: 'AI Short Film',
     description: 'Making the everyday look extraordinary.',
-    vimeoId: '1164968116',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1164968116/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=c2e128c16fa9ac31b31484dbc252c2541deb048ea150eb5e82909e0155dfbb05',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/640ecafd7577f69bc930067a_9_SAMSUNG \'Food pics made epic\' Spain-poster-00001.jpg',
     runtime: ':15',
     tags: ['Macro', 'Commercial'],
@@ -118,7 +117,7 @@ const PROJECTS: Project[] = [
     title: 'Inner',
     category: 'AI Music Video',
     description: 'A cinematic journey through the lens of a visionary director.',
-    vimeoId: '1116472001',
+    videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1116472001/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=1872788569e669e274e3a8c478685d0a72c9fa32d603053cd2d3c662258b94f0',
     thumbnail: 'https://cdn.prod.website-files.com/640d124abc45fd23e3362055/6417ca7136dcd36eb2001eab_11_Director-s-cut-for-Luca-Santonastaso-poster-00001.jpg',
     runtime: '2:15',
     tags: ['Direction', 'Edit'],
@@ -172,16 +171,7 @@ const CursorFollower = ({ active, text }: { active: boolean; text: string }) => 
 };
 
 const CinemaModal = ({ project, onClose }: { project: Project; onClose: () => void }) => {
-  const isMounted = useRef(true);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const playerRef = useRef<Player | null>(null);
-  
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -192,58 +182,10 @@ const CinemaModal = ({ project, onClose }: { project: Project; onClose: () => vo
   }, [onClose]);
 
   useEffect(() => {
-    let player: Player | null = null;
-    let isDestroyed = false;
-
-    if (containerRef.current) {
-      try {
-        // Initialize with muted: true to guarantee autoplay, then try to unmute
-        player = new Player(containerRef.current, {
-          id: project.vimeoId,
-          autoplay: true,
-          loop: true,
-          muted: true, // Start muted to ensure it plays
-          responsive: true,
-          controls: true,
-          playsinline: true,
-        });
-
-        playerRef.current = player;
-        
-        player.ready().then(() => {
-          if (!isDestroyed && isMounted.current && playerRef.current === player) {
-            // Once ready, try to unmute and play
-            player.setMuted(false).catch(() => {
-              // If unmuting fails (autoplay policy), stay muted but keep playing
-            });
-            return player.play();
-          }
-        }).catch((err) => {
-          // Silently handle expected errors during unmounting/destruction
-          const errStr = String(err);
-          const isExpectedError = isDestroyed || !isMounted.current || !err || 
-                                errStr.includes('Unknown player') || 
-                                errStr.includes('unloaded');
-          
-          if (!isExpectedError) {
-            console.warn('Vimeo player error in modal:', err);
-          }
-        });
-      } catch (error) {
-        console.warn('Failed to initialize Vimeo player in modal:', error);
-      }
-
-      return () => {
-        isDestroyed = true;
-        if (player) {
-          if (playerRef.current === player) {
-            playerRef.current = null;
-          }
-          player.destroy().catch(() => {});
-        }
-      };
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
     }
-  }, [project.vimeoId]);
+  }, []);
 
   return (
     <motion.div
@@ -258,19 +200,19 @@ const CinemaModal = ({ project, onClose }: { project: Project; onClose: () => vo
         exit={{ scale: 0.9, opacity: 0 }}
         className="relative w-full max-w-7xl aspect-video bg-zinc-900 rounded-2xl overflow-hidden shadow-2xl"
       >
-        {/* Background Thumbnail while loading */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-50"
-          style={{ backgroundImage: `url(${project.thumbnail})` }}
+        <video
+          ref={videoRef}
+          src={project.videoUrl}
+          autoPlay
+          loop
+          playsInline
+          controls
+          className="w-full h-full object-cover relative z-10"
+          poster={project.thumbnail}
         />
-        
-        <div ref={containerRef} className="w-full h-full relative z-10" />
-        
-        {/* Controls Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-        
-        <div className="absolute top-6 right-6 flex items-center gap-4 pointer-events-auto">
-          <button 
+
+        <div className="absolute top-6 right-6 flex items-center gap-4 pointer-events-auto z-20">
+          <button
             onClick={onClose}
             className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
           >
@@ -278,7 +220,7 @@ const CinemaModal = ({ project, onClose }: { project: Project; onClose: () => vo
           </button>
         </div>
 
-        <div className="absolute bottom-10 left-10 text-white pointer-events-none">
+        <div className="absolute bottom-10 left-10 text-white pointer-events-none z-20">
           <p className="text-xs uppercase tracking-[0.3em] font-bold text-white/50 mb-2">{project.category}</p>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4">{project.title}</h2>
           <p className="text-lg text-white/70 max-w-2xl mb-6">{project.description}</p>
@@ -303,10 +245,8 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onOpen, onHover }) => {
-  const isMounted = useRef(true);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const playerRef = useRef<Player | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isInView, setIsInView] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -319,18 +259,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onOpen, onHov
   }, [isMuted, isHovered, onHover]);
 
   useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { 
+      {
         threshold: 0.01,
         rootMargin: '200px 0px 200px 0px'
       }
@@ -344,95 +277,29 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onOpen, onHov
   }, []);
 
   useEffect(() => {
-    let player: Player | null = null;
-    let isDestroyed = false;
-    let timeoutId: number;
+    const video = videoRef.current;
+    if (!video) return;
 
-    if (isInView && containerRef.current) {
-      timeoutId = window.setTimeout(() => {
-        if (!isMounted.current || !isInView) return;
-
-        try {
-          player = new Player(containerRef.current!, {
-            id: project.vimeoId,
-            autoplay: true,
-            loop: true,
-            muted: true,
-            background: true,
-            responsive: true,
-            controls: false,
-            playsinline: true,
-          });
-
-          playerRef.current = player;
-          
-          // Ensure player is ready and playing
-          player.ready().then(() => {
-            if (!isDestroyed && isMounted.current && playerRef.current === player) {
-              setIsLoaded(true);
-              return player.play();
-            }
-          }).catch((err) => {
-            // Silently handle expected errors during unmounting/destruction
-            const errStr = String(err);
-            const isExpectedError = isDestroyed || !isMounted.current || !err || 
-                                  errStr.includes('Unknown player') || 
-                                  errStr.includes('unloaded');
-            
-            if (!isExpectedError) {
-              console.warn('Vimeo player error in Work:', err);
-            }
-          });
-        } catch (error) {
-          console.warn('Failed to initialize Vimeo player:', error);
-        }
-      }, 200); // Increased delay to 200ms
+    if (isInView) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
     }
+  }, [isInView]);
 
-    return () => {
-      isDestroyed = true;
-      setIsLoaded(false);
-      window.clearTimeout(timeoutId);
-      if (player) {
-        if (playerRef.current === player) {
-          playerRef.current = null;
-        }
-        player.destroy().catch(() => {});
-      }
-    };
-  }, [isInView, project.vimeoId]);
+  const handleLoadedData = () => {
+    setIsLoaded(true);
+  };
 
   const toggleMute = (e: React.MouseEvent) => {
-    // Prevent modal from opening when clicking to unmute
     e.stopPropagation();
-    const player = playerRef.current;
-    if (player && isMounted.current) {
-      // Check if player is still valid before calling methods
-      player.ready().then(() => {
-        if (playerRef.current === player && isMounted.current) {
-          return player.getMuted();
-        }
-        throw new Error('Player changed or unmounted');
-      }).then((muted) => {
-        if (playerRef.current === player && isMounted.current) {
-          player.setMuted(!muted).catch(() => {});
-          setIsMuted(!muted);
-        }
-      }).catch((err) => {
-        // Silently handle expected errors during unmounting/destruction
-        const errStr = String(err);
-        const isExpectedError = !err || 
-                              errStr.includes('Unknown player') || 
-                              errStr.includes('unloaded') ||
-                              errStr.includes('Player changed or unmounted');
-        
-        if (!isExpectedError) {
-          console.warn('Error toggling mute:', err);
-        }
-      });
+    const video = videoRef.current;
+    if (video) {
+      video.muted = !video.muted;
+      setIsMuted(video.muted);
     }
   };
-  
+
   return (
     <motion.div
       ref={cardRef}
@@ -449,19 +316,26 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onOpen, onHov
       onClick={toggleMute}
     >
       <div className="absolute inset-0 w-full h-full pointer-events-none">
-        {/* Poster Image Fallback */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
-          style={{ 
+          style={{
             backgroundImage: `url(${project.thumbnail})`,
-            opacity: isLoaded ? 0 : 1 
+            opacity: isLoaded ? 0 : 1
           }}
         />
-        <div ref={containerRef} className="w-full h-full" />
+        <video
+          ref={videoRef}
+          src={project.videoUrl}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onLoadedData={handleLoadedData}
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700" />
       </div>
 
-      {/* Mute/Unmute Indicator */}
       <div className="absolute top-10 right-10 z-20 bg-black/40 backdrop-blur-md p-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
         {isMuted ? (
           <VolumeX size={20} className="text-white" />
@@ -469,10 +343,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onOpen, onHov
           <Volume2 size={20} className="text-white" />
         )}
       </div>
-      
+
       <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-20 z-10 pointer-events-none">
         <div className="max-w-[1800px] mx-auto w-full">
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
@@ -480,7 +354,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onOpen, onHov
           >
             {project.category}
           </motion.p>
-          <motion.h3 
+          <motion.h3
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -488,8 +362,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onOpen, onHov
           >
             {project.title}
           </motion.h3>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
@@ -500,7 +374,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onOpen, onHov
             </span>
             <div className="h-px flex-1 bg-white/10" />
             <div className="flex gap-4 pointer-events-auto">
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onOpen(project);
@@ -531,12 +405,12 @@ export default function Work() {
     setCursor({ active, text });
   }, []);
 
-  const filteredProjects = activeFilter === 'All' 
-    ? PROJECTS 
+  const filteredProjects = activeFilter === 'All'
+    ? PROJECTS
     : PROJECTS.filter(project => {
         const category = project.category.toLowerCase();
         const filter = activeFilter.toLowerCase();
-        
+
         if (filter === 'short film') {
           return category.includes('short film') || category.includes('trailer');
         }
@@ -550,8 +424,7 @@ export default function Work() {
 
       <main className="pt-40 pb-40">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-          
-          {/* Hero Section */}
+
           <section className="mb-32">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -567,8 +440,8 @@ export default function Work() {
                 </p>
                 <div className="flex gap-4">
                   {['All', 'Commercial', 'Music Video', 'Short Film'].map(filter => (
-                    <button 
-                      key={filter} 
+                    <button
+                      key={filter}
                       onClick={() => setActiveFilter(filter)}
                       className={cn(
                         "text-[10px] uppercase tracking-widest font-bold transition-colors",
@@ -583,15 +456,14 @@ export default function Work() {
             </motion.div>
           </section>
 
-          {/* Cinematic Reel Grid (Full Width) */}
           <section className="mb-40 -mx-6 md:-mx-12">
             <div className="flex flex-col">
               <AnimatePresence mode="popLayout">
                 {filteredProjects.map((project, index) => (
-                  <ProjectCard 
-                    key={project.id} 
-                    project={project} 
-                    index={index} 
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    index={index}
                     onOpen={setSelectedProject}
                     onHover={handleHover}
                   />
@@ -600,9 +472,8 @@ export default function Work() {
             </div>
           </section>
 
-          {/* Capabilities Strip */}
           <section className="py-20 border-y border-white/10 mb-40">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -620,12 +491,11 @@ export default function Work() {
             </motion.div>
           </section>
 
-          {/* CTA Section */}
           <section className="py-40 border-t border-white/10 text-center">
             <Link to="/contact" className="group inline-block">
               <h2 className="text-7xl md:text-[10vw] font-bold tracking-tighter leading-[0.85] mb-12 group-hover:text-white/80 transition-colors">
                 <span className="text-white/40 font-serif italic font-light">Got a project in mind?</span> <br />
-                Let’s talk
+                Let's talk
               </h2>
               <div className="flex justify-center">
                 <div className="circle-hero">
@@ -645,7 +515,7 @@ export default function Work() {
                 <a href="#" className="text-[11px] uppercase tracking-widest font-bold text-white/40 hover:text-white transition-colors">LinkedIn</a>
               </div>
               <div className="text-[11px] uppercase tracking-widest font-bold text-white/20">
-                © 2024 6Frame Studio. All rights reserved.
+                &copy; 2024 6Frame Studio. All rights reserved.
               </div>
             </div>
           </footer>
@@ -654,9 +524,9 @@ export default function Work() {
 
       <AnimatePresence>
         {selectedProject && (
-          <CinemaModal 
-            project={selectedProject} 
-            onClose={() => setSelectedProject(null)} 
+          <CinemaModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
           />
         )}
       </AnimatePresence>
